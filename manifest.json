@@ -1,0 +1,28 @@
+{
+    "name": "المكتبة الصوتية الإسلامية",
+    "short_name": "مكتبتي الصوتية",
+    "description": "استمع إلى الدروس والمحاضرات الإسلامية",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#2c3e50",
+    "theme_color": "#3498db",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "https://img.icons8.com/fluency/96/islam.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        },
+        {
+            "src": "https://img.icons8.com/fluency/144/islam.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        },
+        {
+            "src": "https://img.icons8.com/fluency/192/islam.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ]
+}
+
