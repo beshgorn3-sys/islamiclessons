@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم المدير - المكتبة الصوتية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Tajawal', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            direction: rtl;
+        }
+
+        /* حاوية المصادقة */
+        .auth-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            text-align: center;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .auth-container i {
+            font-size: 48px;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .auth-container h2 {
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        .auth-container p {
+            color: #718096;
+            margin-bottom: 20px;
+        }
+
+        .auth-container input {
+            width: 100%;
+            padding: 14px 16px;
+            margin: 10px 0;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .auth-container input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .auth-container button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .auth-container button:hover {
+            transform: translateY(-2px);
+        }
+
+        /* حاوية لوحة التحكم */
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* الهيدر */
+        .admin-header {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .admin-header h1 {
+            color: #2d3748;
+            font-size: 1.5rem;
+        }
+
+        .admin-header h1 i {
+            color: #667eea;
+            margin-left: 10px;
+        }
+
+        .logout-btn {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c53030;
+            transform: scale(1.02);
+        }
+
+        /* تبويبات */
+        .admin-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .admin-tab {
+            background: rgba(255,255,255,0.9);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #4a5568;
+        }
+
+        .admin-tab i {
+            margin-left: 8px;
+        }
+
+        .admin-tab:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .admin-tab.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        /* محتوى التبويبات */
+        .admin-tab-content {
+            display: none;
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .admin-tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* النماذج */
+        .form-container h2 {
+            margin-bottom: 25px;
+            color: #2d3748;
+            border-right: 4px solid #667eea;
+            padding-right: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .input-group label i {
+            color: #667eea;
+            margin-left: 8px;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-group small {
+            display: block;
+            margin-top: 6px;
+            color: #718096;
+            font-size: 12px;
+        }
+
+        .input-group small a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .form-container button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .form-container button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* حالة العملية */
+        .status {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            display: none;
+        }
+
+        .status.success {
+            display: block;
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .status.error {
+            display: block;
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .status.loading {
+            display: block;
+            background: #feebc8;
+            color: #7b341e;
+        }
+
+        /* إضافة تصنيف */
+        .add-category {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .add-category input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: inherit;
+        }
+
+        .add-category button {
+            padding: 12px 24px;
+            background: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        /* قوائم */
+        .playlists-list,
+        .categories-list {
+            margin-top: 20px;
+        }
+
+        .playlist-item,
+        .category-item {
+            background: #f7fafc;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            transition: all 0.3s;
+        }
+
+        .playlist-item:hover,
+        .category-item:hover {
+            background: #edf2f7;
+            transform: translateX(-5px);
+        }
+
+        .playlist-info {
+            flex: 1;
+        }
+
+        .playlist-info strong {
+            font-size: 1rem;
+            color: #2d3748;
+        }
+
+        .playlist-info small {
+            color: #718096;
+            font-size: 0.85rem;
+        }
+
+        .playlist-category {
+            background: #e9d8fd;
+            color: #6b46c1;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        .edit-btn {
+            background: #ed8936;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-left: 8px;
+            transition: all 0.2s;
+        }
+
+        .edit-btn:hover {
+            background: #dd6b20;
+        }
+
+        .delete-btn {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .delete-btn:hover {
+            background: #c53030;
+        }
+
+        /* مودال التعديل */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 500px;
+            animation: slideUp 0.3s ease;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+
+        .modal-content input,
+        .modal-content select {
+            width: 100%;
+            padding: 12px 16px;
+            margin: 10px 0;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: inherit;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .save-btn {
+            background: #48bb78;
+            color: white;
+        }
+
+        .cancel-btn {
+            background: #a0aec0;
+            color: white;
+        }
+
+        /* تحذير محلي */
+        .local-warning {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* أنيميشن */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* استجابة */
+        @media (max-width: 768px) {
+            .admin-container {
+                padding: 15px;
+            }
+            
+            .admin-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .admin-tabs {
+                justify-content: center;
+            }
+            
+            .admin-tab {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+            
+            .admin-tab-content {
+                padding: 20px;
+            }
+            
+            .playlist-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- شاشة تسجيل الدخول -->
+    <div id="auth-container" class="auth-container">
+        <i class="fas fa-lock"></i>
+        <h2>لوحة تحكم المدير</h2>
+        <p>الرجاء إدخال كلمة المرور للمتابعة</p>
+        <input type="password" id="admin-password" placeholder="كلمة المرور">
+        <button onclick="checkPassword()">تسجيل الدخول</button>
+        <div id="auth-error" style="color: #e53e3e; margin-top: 12px;"></div>
+    </div>
+
+    <!-- محتوى لوحة التحكم -->
+    <div id="admin-content" class="admin-container hidden">
+        <div class="admin-header">
+            <h1><i class="fas fa-tools"></i> لوحة تحكم المدير</h1>
+            <button onclick="logout()" class="logout-btn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
+        </div>
+        
+        <div id="local-warning" class="local-warning hidden">
+            <i class="fas fa-info-circle"></i> ⚠️ أنت تعمل محلياً. تأكد من أن مفتاح YouTube API يعمل بشكل صحيح.
+        </div>
+        
+        <div class="admin-tabs">
+            <button class="admin-tab active" data-tab="add"><i class="fas fa-plus-circle"></i> إضافة سلسلة</button>
+            <button class="admin-tab" data-tab="categories"><i class="fas fa-tags"></i> إدارة التصنيفات</button>
+            <button class="admin-tab" data-tab="manage"><i class="fas fa-edit"></i> إدارة السلاسل</button>
+        </div>
+        
+        <!-- تبويب إضافة سلسلة -->
+        <div id="tab-add" class="admin-tab-content active">
+            <div class="form-container">
+                <h2><i class="fas fa-plus-circle"></i> إضافة سلسلة جديدة</h2>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-key"></i> مفتاح YouTube API</label>
+                    <input type="password" id="apiKey" placeholder="أدخل مفتاح API الخاص بك">
+                    <small>📌 احصل عليه من <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a></small>
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fab fa-youtube"></i> رابط قائمة التشغيل</label>
+                    <input type="url" id="playlistUrl" placeholder="https://youtube.com/playlist?list=...">
+                    <small>📌 انسخ رابط قائمة التشغيل من اليوتيوب</small>
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-user"></i> اسم الشيخ</label>
+                    <input type="text" id="sheikhName" placeholder="مثال: الشيخ محمد بن صالح العثيمين">
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-book-open"></i> اسم السلسلة</label>
+                    <input type="text" id="seriesName" placeholder="مثال: تفسير القرآن الكريم">
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-tag"></i> التصنيف</label>
+                    <select id="categorySelect">
+                        <option value="">-- اختر التصنيف --</option>
+                    </select>
+                    <small>📌 يمكنك إضافة تصنيفات جديدة من تبويب "إدارة التصنيفات"</small>
+                </div>
+                
+                <button id="add-button" onclick="addPlaylist()">
+                    <i class="fas fa-cloud-upload-alt"></i> إضافة إلى Firebase
+                </button>
+                <div id="status"></div>
+            </div>
+        </div>
+        
+        <!-- تبويب إدارة التصنيفات -->
+        <div id="tab-categories" class="admin-tab-content">
+            <div class="form-container">
+                <h2><i class="fas fa-tags"></i> إدارة التصنيفات</h2>
+                
+                <div class="add-category">
+                    <input type="text" id="new-category-name" placeholder="اسم التصنيف الجديد (مثال: قرآن، حديث، فقه)">
+                    <button onclick="addCategory()"><i class="fas fa-plus"></i> إضافة تصنيف</button>
+                </div>
+                
+                <div id="categories-list">
+                    <p>جاري التحميل...</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- تبويب إدارة السلاسل -->
+        <div id="tab-manage" class="admin-tab-content">
+            <div class="form-container">
+                <h2><i class="fas fa-edit"></i> تعديل السلاسل</h2>
+                <div id="existing-playlists">
+                    <p>جاري التحميل...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال التعديل -->
+    <div id="edit-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3><i class="fas fa-edit"></i> تعديل السلسلة</h3>
+            <input type="text" id="edit-series-name" placeholder="اسم السلسلة">
+            <input type="text" id="edit-sheikh-name" placeholder="اسم الشيخ">
+            <select id="edit-category"></select>
+            <div class="modal-buttons">
+                <button class="cancel-btn" onclick="closeModal()"><i class="fas fa-times"></i> إلغاء</button>
+                <button class="save-btn" onclick="saveEdit()"><i class="fas fa-save"></i> حفظ التغييرات</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script>
+        // إظهار تحذير للعمل المحلي
+        if (window.location.protocol === 'file:') {
+            document.getElementById('local-warning').classList.remove('hidden');
+        }
+        
+        // كلمة المرور - يمكنك تغييرها
+        const ADMIN_PASSWORD = "admin123";
+        
+        // تهيئة Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCpjKIDFovVT6lhINojXSBphf1YkErqbHQ",
+            authDomain: "telgramfiles.firebaseapp.com",
+            projectId: "telgramfiles",
+            storageBucket: "telgramfiles.firebasestorage.app",
+            messagingSenderId: "895894298208",
+            appId: "1:895894298208:web:9dcb6f93cfa12d93692d05"
+        };
+        
+        let db;
+        let categories = [];
+        let currentEditId = null;
+        
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            console.log('✅ Firebase initialized');
+        } catch (error) {
+            console.error('❌ Firebase error:', error);
+        }
+        
+        // تبديل التبويبات
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+                
+                // تحديث البيانات عند فتح التبويب
+                if (tab.dataset.tab === 'categories') loadCategories();
+                if (tab.dataset.tab === 'manage') loadExistingPlaylists();
+            });
+        });
+        
+        // تحميل التصنيفات
+        async function loadCategories() {
+            if (!db) return;
+            try {
+                const snapshot = await db.collection("categories").orderBy("name").get();
+                categories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                // تحديث قائمة التصنيفات في صفحة الإضافة
+                const categorySelect = document.getElementById('categorySelect');
+                if (categorySelect) {
+                    categorySelect.innerHTML = '<option value="">-- اختر التصنيف --</option>';
+                    categories.forEach(cat => {
+                        categorySelect.innerHTML += `<option value="${cat.id}">${escapeHtml(cat.name)}</option>`;
+                    });
+                }
+                
+                // عرض التصنيفات في صفحة الإدارة
+                const categoriesList = document.getElementById('categories-list');
+                if (categoriesList) {
+                    if (categories.length === 0) {
+                        categoriesList.innerHTML = '<div class="empty-state">📭 لا توجد تصنيفات. أضف تصنيفاً جديداً.</div>';
+                    } else {
+                        categoriesList.innerHTML = '';
+                        categories.forEach(cat => {
+                            const div = document.createElement('div');
+                            div.className = 'category-item';
+                            div.innerHTML = `
+                                <span><i class="fas fa-tag"></i> ${escapeHtml(cat.name)}</span>
+                                <button class="delete-btn" onclick="deleteCategory('${cat.id}')">
+                                    <i class="fas fa-trash"></i> حذف
+                                </button>
+                            `;
+                            categoriesList.appendChild(div);
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+        
+        // إضافة تصنيف
+        async function addCategory() {
+            const name = document.getElementById('new-category-name').value.trim();
+            if (!name) {
+                showStatus('الرجاء إدخال اسم التصنيف', 'error');
+                return;
+            }
+            
+            try {
+                await db.collection("categories").add({
+                    name: name,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                document.getElementById('new-category-name').value = '';
+                showStatus('✅ تم إضافة التصنيف بنجاح', 'success');
+                loadCategories();
+            } catch (error) {
+                showStatus('❌ فشل الإضافة: ' + error.message, 'error');
+            }
+        }
+        
+        // حذف تصنيف
+        async function deleteCategory(categoryId) {
+            if (!confirm('⚠️ هل أنت متأكد من حذف هذا التصنيف؟\nملاحظة: السلاسل المرتبطة بهذا التصنيف ستبقى بدون تصنيف.')) return;
+            
+            try {
+                await db.collection("categories").doc(categoryId).delete();
+                showStatus('✅ تم حذف التصنيف بنجاح', 'success');
+                loadCategories();
+            } catch (error) {
+                showStatus('❌ فشل الحذف: ' + error.message, 'error');
+            }
+        }
+        
+        // تحميل السلاسل
+        async function loadExistingPlaylists() {
+            if (!db) return;
+            const container = document.getElementById('existing-playlists');
+            container.innerHTML = '<div class="loading-state">⏳ جاري التحميل...</div>';
+            
+            try {
+                const snapshot = await db.collection("playlists").orderBy("createdAt", "desc").get();
+                if (snapshot.empty) {
+                    container.innerHTML = '<div class="empty-state">📭 لا توجد سلاسل مضافة بعد</div>';
+                    return;
+                }
+                
+                // تحميل التصنيفات
+                const catsSnapshot = await db.collection("categories").get();
+                const categoriesMap = {};
+                catsSnapshot.docs.forEach(doc => {
+                    categoriesMap[doc.id] = doc.data().name;
+                });
+                
+                container.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const categoryName = data.categoryId ? categoriesMap[data.categoryId] || 'غير مصنف' : 'غير مصنف';
+                    const div = document.createElement('div');
+                    div.className = 'playlist-item';
+                    div.innerHTML = `
+                        <div class="playlist-info">
+                            <strong>📚 ${escapeHtml(data.series)}</strong><br>
+                            <small>👤 ${escapeHtml(data.sheikh)} | 🎬 ${data.videos.length} درس</small><br>
+                            <span class="playlist-category"><i class="fas fa-tag"></i> ${escapeHtml(categoryName)}</span>
+                        </div>
+                        <div>
+                            <button class="edit-btn" onclick="openEditModal('${doc.id}', '${escapeHtml(data.series)}', '${escapeHtml(data.sheikh)}', '${data.categoryId || ''}')">
+                                <i class="fas fa-edit"></i> تعديل
+                            </button>
+                            <button class="delete-btn" onclick="deletePlaylist('${doc.id}')">
+                                <i class="fas fa-trash"></i> حذف
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            } catch (error) {
+                container.innerHTML = '<div class="error-state">❌ خطأ: ' + error.message + '</div>';
+                console.error(error);
+            }
+        }
+        
+        // فتح مودال التعديل
+        async function openEditModal(id, series, sheikh, categoryId) {
+            currentEditId = id;
+            document.getElementById('edit-series-name').value = series;
+            document.getElementById('edit-sheikh-name').value = sheikh;
+            
+            // تحميل التصنيفات في المودال
+            const editCategorySelect = document.getElementById('edit-category');
+            editCategorySelect.innerHTML = '<option value="">-- اختر التصنيف --</option>';
+            categories.forEach(cat => {
+                const selected = cat.id === categoryId ? 'selected' : '';
+                editCategorySelect.innerHTML += `<option value="${cat.id}" ${selected}>${escapeHtml(cat.name)}</option>`;
+            });
+            
+            document.getElementById('edit-modal').classList.remove('hidden');
+        }
+        
+        // حفظ التعديلات
+        async function saveEdit() {
+            const newSeries = document.getElementById('edit-series-name').value.trim();
+            const newSheikh = document.getElementById('edit-sheikh-name').value.trim();
+            const newCategoryId = document.getElementById('edit-category').value;
+            
+            if (!newSeries || !newSheikh) {
+                showStatus('الرجاء ملء جميع الحقول', 'error');
+                return;
+            }
+            
+            try {
+                const updateData = {
+                    series: newSeries,
+                    sheikh: newSheikh
+                };
+                
+                if (newCategoryId) {
+                    updateData.categoryId = newCategoryId;
+                }
+                
+                await db.collection("playlists").doc(currentEditId).update(updateData);
+                showStatus('✅ تم تعديل السلسلة بنجاح', 'success');
+                closeModal();
+                loadExistingPlaylists();
+            } catch (error) {
+                showStatus('❌ فشل التعديل: ' + error.message, 'error');
+            }
+        }
+        
+        function closeModal() {
+            document.getElementById('edit-modal').classList.add('hidden');
+            currentEditId = null;
+        }
+        
+        // حذف سلسلة
+        async function deletePlaylist(playlistId) {
+            if (!confirm('⚠️ هل أنت متأكد من حذف هذه السلسلة؟\nهذا الإجراء لا يمكن التراجع عنه.')) return;
+            
+            try {
+                await db.collection("playlists").doc(playlistId).delete();
+                showStatus('✅ تم حذف السلسلة بنجاح', 'success');
+                loadExistingPlaylists();
+            } catch (error) {
+                showStatus('❌ فشل الحذف: ' + error.message, 'error');
+            }
+        }
+        
+        // إضافة سلسلة جديدة
+        async function addPlaylist() {
+            if (!db) {
+                showStatus('❌ خطأ في الاتصال بقاعدة البيانات', 'error');
+                return;
+            }
+            
+            const button = document.getElementById('add-button');
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const url = document.getElementById('playlistUrl').value.trim();
+            const sheikh = document.getElementById('sheikhName').value.trim();
+            const series = document.getElementById('seriesName').value.trim();
+            const categoryId = document.getElementById('categorySelect').value;
+            
+            if (!apiKey || !url || !sheikh || !series) {
+                showStatus('❌ الرجاء ملء جميع الحقول', 'error');
+                return;
+            }
+            
+            const playlistIdMatch = url.match(/list=([a-zA-Z0-9_-]+)/);
+            if (!playlistIdMatch) {
+                showStatus('❌ رابط قائمة التشغيل غير صالح', 'error');
+                return;
+            }
+            
+            const playlistId = playlistIdMatch[1];
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري العمل...';
+            
+            try {
+                showStatus('📡 1/3: جاري جلب الدروس من يوتيوب...', 'loading');
+                
+                let videos = [];
+                let nextPageToken = '';
+                let pageCount = 0;
+                const maxPages = 10;
+                
+                do {
+                    pageCount++;
+                    const ytUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=50&key=${apiKey}&pageToken=${nextPageToken}`;
+                    const response = await fetch(ytUrl);
+                    const data = await response.json();
+                    
+                    if (data.error) throw new Error(data.error.message);
+                    
+                    if (data.items) {
+                        data.items.forEach(item => {
+                            const title = item.snippet.title;
+                            if (title !== "Private video" && 
+                                title !== "Deleted video" &&
+                                !title.includes("[Private video]")) {
+                                videos.push({
+                                    videoId: item.snippet.resourceId.videoId,
+                                    title: title
+                                });
+                            }
+                        });
+                    }
+                    
+                    nextPageToken = data.nextPageToken;
+                } while (nextPageToken && pageCount < maxPages);
+                
+                if (videos.length === 0) throw new Error("لم يتم العثور على فيديوهات");
+                
+                showStatus(`💾 2/3: جاري حفظ ${videos.length} درس في Firebase...`, 'loading');
+                
+                const playlistData = {
+                    playlistId: playlistId,
+                    sheikh: sheikh,
+                    series: series,
+                    videos: videos,
+                    videosCount: videos.length,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                if (categoryId) {
+                    playlistData.categoryId = categoryId;
+                }
+                
+                await db.collection("playlists").doc(playlistId).set(playlistData);
+                
+                showStatus(`✅ 3/3: تمت إضافة "${series}" بنجاح! (${videos.length} درس)`, 'success');
+                
+                // تفريغ الحقول
+                document.getElementById('apiKey').value = '';
+                document.getElementById('playlistUrl').value = '';
+                document.getElementById('sheikhName').value = '';
+                document.getElementById('seriesName').value = '';
+                
+                loadExistingPlaylists();
+                
+            } catch (error) {
+                showStatus('❌ فشل: ' + error.message, 'error');
+            } finally {
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> إضافة إلى Firebase';
+            }
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
+            
+            if (type === 'success' || type === 'error') {
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+        
+        // المصادقة
+        function checkPassword() {
+            const password = document.getElementById('admin-password').value;
+            const errorDiv = document.getElementById('auth-error');
+            
+            if (password === ADMIN_PASSWORD) {
+                localStorage.setItem('admin_auth', 'true');
+                document.getElementById('auth-container').classList.add('hidden');
+                document.getElementById('admin-content').classList.remove('hidden');
+                loadCategories();
+                loadExistingPlaylists();
+                errorDiv.textContent = '';
+            } else {
+                errorDiv.textContent = '❌ كلمة المرور غير صحيحة';
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('admin_auth');
+            document.getElementById('auth-container').classList.remove('hidden');
+            document.getElementById('admin-content').classList.add('hidden');
+            document.getElementById('admin-password').value = '';
+        }
+        
+        function checkAuth() {
+            if (localStorage.getItem('admin_auth') === 'true') {
+                document.getElementById('auth-container').classList.add('hidden');
+                document.getElementById('admin-content').classList.remove('hidden');
+                loadCategories();
+                loadExistingPlaylists();
+            }
+        }
+        
+        checkAuth();
+        
+        // إغلاق المودال عند الضغط خارجها
+        document.getElementById('edit-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
+</body>
+</html>

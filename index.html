@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>المكتبة الصوتية الإسلامية</title>
+    <meta name="description" content="استمع إلى آلاف الدروس والمحاضرات والسلاسل العلمية لكبار الشيوخ">
+    <link rel="icon" href="https://img.icons8.com/fluency/48/islam.png" type="image/png">
+    <meta name="theme-color" content="#2c3e50">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="splash-screen">
+        <div class="splash-content">
+            <i class="fas fa-quran splash-icon"></i>
+            <h1>المكتبة الصوتية</h1>
+            <div class="spinner"></div>
+            <p>جاري تحميل المكتبة...</p>
+        </div>
+    </div>
+
+    <div id="app-container" class="hidden">
+        <header>
+            <div class="header-content">
+                <i class="fas fa-headphones header-icon"></i>
+                <h1 id="main-title">المكتبة الصوتية</h1>
+            </div>
+            <div id="search-bar-container" class="hidden">
+                <div class="search-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="search" id="search-input" placeholder="ابحث عن سلسلة أو شيخ..." autocomplete="off">
+                    <button id="clear-search" class="hidden"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+        </header>
+        
+        <main id="app-view">
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <p>جاري تحميل الدروس...</p>
+            </div>
+        </main>
+        
+        <div id="player-controls" class="hidden">
+            <div id="player-thumbnail">
+                <img id="current-lesson-img" alt="صورة الدرس">
+            </div>
+            <div id="player-info">
+                <p class="player-label">الدرس الحالي</p>
+                <p id="current-lesson-title">---</p>
+                <p id="current-sheikh" class="player-sheikh"></p>
+            </div>
+            <div class="player-buttons">
+                <button id="player-prev" class="player-btn" title="الدرس السابق">
+                    <i class="fas fa-step-backward"></i>
+                </button>
+                <button id="player-playpause" class="player-btn play-btn" title="تشغيل/إيقاف">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button id="player-next" class="player-btn" title="الدرس التالي">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+            </div>
+            <div id="youtube-player-container">
+                <div id="youtube-player"></div>
+            </div>
+        </div>
+    </div>
+
+    <noscript>
+        <div class="error-page">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h1>عذراً، هذا التطبيق يتطلب تفعيل JavaScript</h1>
+        </div>
+    </noscript>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="app.js"></script>
+</body>
+</html>
